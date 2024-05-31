@@ -1,4 +1,4 @@
-# demo para desarrollar un servidor de zonas
+# Servidor de zonas
 
 ## Pasos:
 Estando en el directorio de backend:
