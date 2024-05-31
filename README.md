@@ -1,7 +1,9 @@
-# Servidor de zonas
+# Zone server
 
-## Pasos:
-Estando en el directorio de backend:
+## Worked with python version 3.11.0
+
+## Steps:
+Being in the backend directory:
 - python -m venv .venv 
 - .venv\Scripts\activate  
 - pip install -r requirements.txt
