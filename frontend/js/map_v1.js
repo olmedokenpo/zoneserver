@@ -1,4 +1,4 @@
-
+ 
 // Iniciar el mapa
 var map = L.map('map').setView([40.49820, -3.34714], 14);
 
@@ -33,46 +33,38 @@ function onMapClick(e) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
             latlng: e.latlng
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Respuesta del servidor:', data);
-            // Añadir la geometría al mapa con un popup si se encuentra el municipio
-            var geojsonLayer = L.geoJSON(data, {
-                onEachFeature: function (feature, layer) {
-                    if (feature.properties && feature.properties.name_4) {
-                        layer.bindPopup('Municipio: ' + feature.properties.name_4);
-                    }
-                }
-            }).addTo(map);
-            // Ajustar la vista del mapa para encuadrar la geometría
-            map.fitBounds(geojsonLayer.getBounds());
-        })
-        .catch(error => console.error('Error al enviar las coordenadas al servidor:', error));
+    .then(response => response.json())
+    .then(data => {
+        console.log('Respuesta del servidor:', data);
+        L.geoJSON(data).addTo(map);
+    })
+    .catch(error => console.error('Error al enviar las coordenadas al servidor:', error));
 }
 
 // Agregar evento de clic al mapa
 map.on('click', onMapClick);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
