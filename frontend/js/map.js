@@ -41,10 +41,11 @@ function onMapClick(e) {
         .then(data => {
             console.log('Respuesta del servidor:', data);
             // Añadir la geometría al mapa con un popup si se encuentra el municipio
+            console.log("data",data)
             var geojsonLayer = L.geoJSON(data, {
                 onEachFeature: function (feature, layer) {
-                    if (feature.properties && feature.properties.name_4) {
-                        layer.bindPopup('Municipio: ' + feature.properties.name_4);
+                    if (feature.properties && feature.properties.name_4 && feature.properties.area) {
+                        layer.bindPopup('Municipio: ' + feature.properties.name_4 + '<br>Area: ' + feature.properties.area + ' Km²');
                     }
                 }
             }).addTo(map);

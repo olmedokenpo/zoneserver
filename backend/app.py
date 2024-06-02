@@ -27,7 +27,25 @@ def obtener_municipio(lat, lng):
 
     # Usar func para construir la geometría del punto
     punto = func.ST_SetSRID(func.ST_Point(lng, lat), 4326)
-    municipio = session.query(Municipio.name_4, func.ST_AsGeoJSON(Municipio.geom).label('geom_geojson')).filter(func.ST_Contains(Municipio.geom, punto)).first()
+
+    # Transformar la geometría del municipio a una proyección métrica (por ejemplo, UTM zona 30N, EPSG:32630)
+    utm_geom = func.ST_Transform(Municipio.geom, 32630)
+
+    """
+    #Consulta sin la inclusion del area
+    municipio = session.query(  
+        Municipio.name_4, 
+        func.ST_AsGeoJSON(Municipio.geom).label('geom_geojson'),
+        func.ST_Area(Municipio.geom).label('area')
+        ).filter(func.ST_Contains(Municipio.geom, punto)).first()
+        """
+    
+    #Consulta con la inclusion del area
+    municipio = session.query( 
+        Municipio.name_4, 
+        func.ST_AsGeoJSON(Municipio.geom).label('geom_geojson'),
+        func.ST_Area(utm_geom).label('area')
+        ).filter(func.ST_Contains(Municipio.geom, punto)).first()
 
     if municipio:
         # Convertir la geometría a GeoJSON
@@ -35,7 +53,8 @@ def obtener_municipio(lat, lng):
         municipio_geojson = {
             "type": "Feature",
             "geometry": geom_geojson,
-            "properties": {"name_4": municipio.name_4}
+            "properties": {"name_4": municipio.name_4,
+                           "area":municipio.area/1000000} #El area esta en metros cuadrados
         }
         return municipio_geojson
     else:
